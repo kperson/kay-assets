@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#Configure SSH User
+RUN echo root:$SSH_PASSWORD | chpasswd
+
+#Configure SSH
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
+
+#Start nginx
+service nginx start
+
+# Start SSH
+/usr/sbin/sshd -D

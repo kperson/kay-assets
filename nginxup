@@ -11,13 +11,13 @@ sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
 service nginx start
 
 
-#Load Balance if balancing URL is present
 old_file_hash=''
 
 if [ $NGINX_CONF_URL ]
 then
-  #Start SSH
-  start ssh
+  #Start SSH deamon
+  #Load Balance
+  /usr/sbin/sshd
   cd /etc/nginx
   while true; do
     rm nginx.tmp.conf

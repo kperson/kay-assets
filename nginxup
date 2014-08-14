@@ -15,10 +15,11 @@ old_file_hash=''
 
 if [ $NGINX_CONF_URL ]
 then
-  #Start SSH deamon
-  #Load Balance
+  echo "Starting SSH for Load Balancing"
   /usr/sbin/sshd
+  echo "Balancing URL: $NGINX_CONF_URL"
   cd /etc/nginx
+  echo "Load Balancing"
   while true; do
     rm nginx.tmp.conf
     wget $NGINX_CONF_URL -O nginx.tmp.conf
@@ -32,6 +33,6 @@ then
     sleep 10
   done
 else
-  # Start SSH
+  echo "Starting SSH"
   /usr/sbin/sshd -D
 fi

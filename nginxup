@@ -12,3 +12,23 @@ service nginx start
 
 # Start SSH
 /usr/sbin/sshd -D
+
+
+#Load Balance if balancing URL is present
+old_file_hash=''
+
+if [ $NGINX_CONF_URL ]; then
+  cd /etc/nginx
+  while true; do
+    rm nginx.tmp.conf
+    wget $NGINX_CONF_URL -O nginx.tmp.conf
+    current_file_hash=`md5sum nginx.tmp.conf | awk '{ print $1 }'`
+    if [ "$current_file_hash" != "$old_file_hash" ]; then
+      old_file_hash=$current_file_hash
+      echo "Reloading nginx.conf file"
+      cp nginx.tmp.conf nginx.conf
+      nginx -s reload
+    fi
+    sleep 10
+  done
+fi
